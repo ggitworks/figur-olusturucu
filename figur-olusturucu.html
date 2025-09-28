@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figür Prompt Oluşturucu</title>
+    <style>
+        /* Belirttiğiniz gibi font dosyasını aynı klasörden çağırıyoruz */
+        @font-face {
+            font-family: 'Google Sans';
+            src: url('googlesansregular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        :root {
+            --primary-color: #4285F4; /* Google Blue */
+            --secondary-color: #34A853; /* Google Green */
+            --background-color: #f8f9fa;
+            --text-color: #3c4043;
+            --input-bg-color: #ffffff;
+            --border-color: #dadce0;
+            --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Google Sans', Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: var(--input-bg-color);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 2em;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 600px) {
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .full-width {
+                grid-column: 1 / -1;
+            }
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Google Sans', Arial, sans-serif;
+            font-size: 1em;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input[type="text"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Google Sans', Arial, sans-serif;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            font-weight: bold;
+        }
+
+        #generateBtn {
+            background-color: var(--primary-color);
+            color: white;
+            margin-right: 10px;
+        }
+
+        #generateBtn:hover {
+            background-color: #3367D6;
+            transform: translateY(-2px);
+        }
+
+        #copyBtn {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        #copyBtn:hover {
+            background-color: #2b8242;
+            transform: translateY(-2px);
+        }
+
+        #output {
+            margin-top: 25px;
+            background-color: #e8eaed;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Figür Prompt Oluşturucu</h1>
+        <form id="figurineForm">
+            <div class="form-grid">
+                <div class="input-group">
+                    <label for="character">Karakter Adı / Konsept</label>
+                    <input type="text" id="character" name="character" placeholder="Örn: Cyberpunk Samuray, Uzay Gezgini Tilki">
+                </div>
+
+                <div class="input-group">
+                    <label for="scale">Ölçek</label>
+                    <select id="scale" name="scale">
+                        <option value="1/7 scale">1/7 Ölçek</option>
+                        <option value="1/6 scale">1/6 Ölçek</option>
+                        <option value="1/8 scale">1/8 Ölçek</option>
+                        <option value="1/10 scale">1/10 Ölçek</option>
+                        <option value="chibi style">Chibi / Sevimli Stil</option>
+                        <option value="">Belirtme</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="material">Materyal</label>
+                    <select id="material" name="material">
+                        <option value="high-quality PVC">Yüksek Kalite PVC</option>
+                        <option value="translucent resin">Yarı Saydam Reçine (Resin)</option>
+                        <option value="ABS and PVC">ABS ve PVC</option>
+                        <option value="cold-cast porcelain">Soğuk Döküm Porselen</option>
+                        <option value="">Belirtme</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="artStyle">Sanat Tarzı</label>
+                    <select id="artStyle" name="artStyle">
+                        <option value="detailed anime style">Detaylı Anime Tarzı</option>
+                        <option value="hyperrealistic">Hiper-realistik</option>
+                        <option value="Pixar style">Pixar Tarzı</option>
+                        <option value="Studio Ghibli style">Studio Ghibli Tarzı</option>
+                        <option value="concept art style">Konsept Sanat Tarzı</option>
+                    </select>
+                </div>
+
+                <div class="input-group full-width">
+                    <label for="pose">Poz / Aksiyon</label>
+                    <textarea id="pose" name="pose" placeholder="Örn: Kılıcını çekerken dinamik bir poz, havada süzülürken, bir kitap okurken sakince oturuyor"></textarea>
+                </div>
+
+                <div class="input-group full-width">
+                    <label for="outfit">Kıyafet / Zırh Detayları</label>
+                    <textarea id="outfit" name="outfit" placeholder="Örn: Geleneksel Japon zırhı üzerine neon ışıklar, yıpranmış uzay giysisi, zarif balo elbisesi"></textarea>
+                </div>
+                
+                <div class="input-group full-width">
+                    <label for="base">Kaide / Diorama</label>
+                    <textarea id="base" name="base" placeholder="Örn: Kırık bir tapınak zemininde, fütüristik bir şehrin çatısında, çiçeklerle dolu bir çayırda"></textarea>
+                </div>
+                
+                <div class="input-group full-width">
+                    <label for="extras">Ekstra Detaylar (Aksesuar, İfade vb.)</label>
+                    <textarea id="extras" name="extras" placeholder="Örn: Göz bandı, sırtında asılı bir yay, yüzünde kararlı bir ifade, elinde parlayan bir küre"></textarea>
+                </div>
+
+                <div class="input-group full-width">
+                    <label for="packaging">Paketleme</label>
+                    <textarea id="packaging" name="packaging" placeholder="Örn: Karakterin sanatını içeren pencereli kutu (window box), koleksiyoner kutusu"></textarea>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button type="button" id="generateBtn">Prompt Oluştur</button>
+            </div>
+
+            <div class="input-group full-width">
+                <label for="output">Oluşturulan Prompt</label>
+                <textarea id="output" name="output" readonly rows="10"></textarea>
+                 <div class="button-container">
+                    <button type="button" id="copyBtn">Metni Kopyala</button>
+                 </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('generateBtn').addEventListener('click', function() {
+            const form = document.getElementById('figurineForm');
+            
+            const character = form.elements['character'].value.trim();
+            const scale = form.elements['scale'].value;
+            const material = form.elements['material'].value;
+            const artStyle = form.elements['artStyle'].value;
+            const pose = form.elements['pose'].value.trim();
+            const outfit = form.elements['outfit'].value.trim();
+            const base = form.elements['base'].value.trim();
+            const extras = form.elements['extras'].value.trim();
+            const packaging = form.elements['packaging'].value.trim();
+
+            let prompt = `Full body shot of a professional product photography of a ${scale} figurine of a character named "${character}", made from ${material}. `;
+            prompt += `The figurine is in a dynamic pose: ${pose}. `;
+            prompt += `Detailed outfit: ${outfit}. `;
+            prompt += `The character is standing on a thematic diorama base: ${base}. `;
+            if (extras) {
+                prompt += `Extra details include: ${extras}. `;
+            }
+            prompt += `The overall art style is ${artStyle}, with meticulous attention to detail, perfect paint application, and sharp sculpting. `;
+            prompt += `The figurine is presented in its official packaging, which is a ${packaging}. `;
+            prompt += `Shot in a professional studio setting with dramatic lighting, clean background, photorealistic, 8k, octane render, unreal engine 5.`;
+
+            document.getElementById('output').value = prompt;
+        });
+
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            const outputTextarea = document.getElementById('output');
+            if(outputTextarea.value) {
+                outputTextarea.select();
+                outputTextarea.setSelectionRange(0, 99999); // For mobile devices
+                navigator.clipboard.writeText(outputTextarea.value).then(() => {
+                    const originalText = this.textContent;
+                    this.textContent = 'Kopyalandı!';
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Kopyalama başarısız oldu: ', err);
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
